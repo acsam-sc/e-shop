@@ -21,8 +21,10 @@ try {
   //   Root = (props) => <items.Root {...props} />
   //   console.log(JSON.stringify(items.Root))
   // })()
+  // eslint-disable-next-line no-console
   console.log(Root)
 } catch (ex) {
+  // eslint-disable-next-line no-console
   console.log(' run yarn build:prod to enable ssr')
 }
 
@@ -88,4 +90,5 @@ if (config.isSocketsEnabled) {
   })
   echo.installHandlers(app, { prefix: '/ws' })
 }
+// eslint-disable-next-line no-console
 console.log(`Serving at http://localhost:${port}`)
