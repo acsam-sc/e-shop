@@ -1,9 +1,13 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { setCurrency } from '../../redux/reducers/shopping'
 
 const Header = () => {
+  const dispatch = useDispatch()
+
   return (
     <div className="flex flex-row w-full h-16 bg-black justify-between items-center px-4">
       <div className="flex text-sm md:text-2xl text-white font-bold">The Best E-Shop ever</div>
@@ -21,15 +25,27 @@ const Header = () => {
       <div className="flex flex-col text-xs md:text-base text-white items-center">
         <div>Currency:</div>
         <div>
-          <button type="button" className="px-1 font-semibold">
+          <button
+            type="button"
+            className="px-1 font-semibold"
+            onClick={() => dispatch(setCurrency('USD'))}
+          >
             USD
           </button>
           |
-          <button type="button" className="px-1 font-semibold">
+          <button
+            type="button"
+            className="px-1 font-semibold"
+            onClick={() => dispatch(setCurrency('EUR'))}
+          >
             EUR
           </button>
           |
-          <button type="button" className="px-1 font-semibold">
+          <button
+            type="button"
+            className="px-1 font-semibold"
+            onClick={() => dispatch(setCurrency('CAD'))}
+          >
             CAD
           </button>
         </div>

@@ -10,6 +10,8 @@ import cookieParser from 'cookie-parser'
 import config from './config'
 import Html from '../client/html'
 
+const { readFile } = require('fs').promises
+
 const Root = () => ''
 
 try {
@@ -33,6 +35,15 @@ let connections = []
 const port = process.env.PORT || 8090
 const server = express()
 
+const goodsFile = `${__dirname}/goods_small.json`
+
+const readGoodsFile = async () => {
+  const fileData = await readFile(goodsFile, { encoding: 'utf-8' })
+    .then((data) => JSON.parse(data))
+    .catch((err) => err)
+  return fileData
+}
+
 const middleware = [
   cors(),
   express.static(path.resolve(__dirname, '../dist/assets')),
@@ -42,6 +53,11 @@ const middleware = [
 ]
 
 middleware.forEach((it) => server.use(it))
+
+server.get('/api/v1/products', async (req, res) => {
+  const data = await readGoodsFile()
+  res.json(data)
+})
 
 server.use('/api/', (req, res) => {
   res.status(404)

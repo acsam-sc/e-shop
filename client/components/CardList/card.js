@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { addItemToCart } from '../../redux/reducers/shopping'
 import './card.styles.scss'
 
-const Card = ({ image, title, price, description, amount, currency }) => {
-  const [localAmount, setLocalAmount] = useState(amount)
+const Card = ({ id, image, title, price, description, amount, currency }) => {
+  const dispatch = useDispatch()
 
   return (
     <div className="flex w-full md:w-5/12 m-2 border-2">
@@ -18,16 +20,16 @@ const Card = ({ image, title, price, description, amount, currency }) => {
           </span>
         </div>
         <span className="card__description">{description}</span>
-        {localAmount && (
+        {amount > 0 && (
           <span className="card__product-amount">
-            (You have {localAmount} {localAmount > 1 ? 'pieces' : 'piece'} of this product in your{' '}
+            (You have {amount} {amount > 1 ? 'pieces' : 'piece'} of this product in your &nbsp;
             <Link to="/basket">Cart</Link>)
           </span>
         )}
         <button
           className="flex self-end mt-auto bg-gray-400 w-auto whitespace-nowrap text-sm px-2"
           type="button"
-          onClick={() => setLocalAmount(localAmount + 1)}
+          onClick={() => dispatch(addItemToCart(id))}
         >
           Add to Cart
         </button>
@@ -36,4 +38,4 @@ const Card = ({ image, title, price, description, amount, currency }) => {
   )
 }
 
-export default Card
+export default React.memo(Card)
