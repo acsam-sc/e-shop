@@ -11,6 +11,7 @@ const App = () => {
   const productsArray = useSelector((state) => state.shoppingReducer.productList)
   const currency = useSelector((state) => state.shoppingReducer.currency)
   const itemsInCartArray = useSelector((state) => state.shoppingReducer.itemsInCart)
+  const cartItemsSummary = useSelector((state) => state.shoppingReducer.cartItemsSummary)
 
   useEffect(() => {
     dispatch(getProductsList())
@@ -19,7 +20,7 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen w-auto">
       <Head title="Hello" />
-      <Header />
+      <Header cartItemsSummary={cartItemsSummary} />
       <CardList
         productsArray={productsArray}
         currency={currency}

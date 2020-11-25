@@ -5,20 +5,23 @@ const SET_FETCHING_STATUS = 'e-shop/SET_FETCHING_STATUS'
 const SET_ERROR = 'e-shop/SET_ERROR'
 const SET_PRODUCT_LIST = 'e-shop/SET_PRODUCT_LIST'
 const SET_CURRENCY = 'e-shop/SET_CURRENCY'
+const SET_SUMMARY_ITEMS = 'e-shop/SET_SUMMARY_ITEMS'
 
 const initialState = {
   isFetching: false,
   currency: 'USD',
   error: null,
   productList: [],
-  itemsInCart: []
+  itemsInCart: [],
+  cartItemsSummary: 0
 }
 
 const setProductList = (productList) => ({ type: SET_PRODUCT_LIST, payload: productList })
 const setFetchingStatus = (status) => ({ type: SET_FETCHING_STATUS, payload: status })
 const setError = (error) => ({ type: SET_ERROR, payload: error })
+const setSummaryItems = () => ({ type: SET_SUMMARY_ITEMS })
 
-export const addItemToCart = (itemId, amount) => ({
+const addItemToCartAC = (itemId, amount) => ({
   type: ADD_ITEM_TO_CART,
   payload: { itemId, amount }
 })
@@ -68,6 +71,15 @@ const shoppingReducer = (state = initialState, action) => {
         currency: action.payload
       }
     }
+    case SET_SUMMARY_ITEMS: {
+      return {
+        ...state,
+        cartItemsSummary: state.itemsInCart.reduce((acc, item) => {
+          const count = acc
+          return count + item.amount
+        }, 0)
+      }
+    }
     default:
       return state
   }
@@ -83,6 +95,11 @@ export const getProductsList = (query) => async (dispatch) => {
     // eslint-disable-next-line no-console
     console.log('Error getting product list')
   }
+}
+
+export const addItemToCart = (itemId, amount) => async (dispatch) => {
+  dispatch(addItemToCartAC(itemId, amount))
+  dispatch(setSummaryItems())
 }
 
 export const getSortedListAZ = () => getProductsList('sortby=a-z')
