@@ -5,7 +5,7 @@ import Header from './Header/header'
 import CardList from './CardList/cardlist'
 import { getProductsList } from '../redux/reducers/shopping'
 
-const Dummy = () => {
+const App = () => {
   const dispatch = useDispatch()
 
   const productsArray = useSelector((state) => state.shoppingReducer.productList)
@@ -30,6 +30,6 @@ const Dummy = () => {
   )
 }
 
-Dummy.propTypes = {}
+App.propTypes = {}
 
-export default React.memo(Dummy)
+export default React.memo(App)

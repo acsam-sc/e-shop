@@ -73,9 +73,9 @@ const shoppingReducer = (state = initialState, action) => {
   }
 }
 
-export const getProductsList = () => async (dispatch) => {
+export const getProductsList = (query) => async (dispatch) => {
   try {
-    const productsList = await reqProducts()
+    const productsList = await reqProducts(query)
     dispatch(setProductList(productsList.data))
   } catch (err) {
     dispatch(setFetchingStatus(false))
@@ -84,5 +84,9 @@ export const getProductsList = () => async (dispatch) => {
     console.log('Error getting product list')
   }
 }
+
+export const getSortedListAZ = () => getProductsList('sortby=a-z')
+
+export const getSortedListPrice = () => getProductsList('sortby=price')
 
 export default shoppingReducer

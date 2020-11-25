@@ -56,7 +56,39 @@ middleware.forEach((it) => server.use(it))
 
 server.get('/api/v1/products', async (req, res) => {
   const data = await readGoodsFile()
-  res.json(data)
+  const compareAZ = (a, b) => {
+    if (a.title < b.title) return -1
+    if (a.title > b.title) return 1
+    return 0
+  }
+
+  const sortByAlphabet = () => {
+    const titlesArray = data
+      .map((it, index) => {
+        return { index, title: it.title }
+      })
+      .sort(compareAZ)
+    return titlesArray.map((it) => data[it.index])
+  }
+
+  const sortByPrice = () => {
+    const titlesArray = data
+      .map((it, index) => {
+        return { index, price: it.price }
+      })
+      .sort((a, b) => a.price - b.price)
+    return titlesArray.map((it) => data[it.index])
+  }
+  switch (req.query.sortby) {
+    case 'a-z':
+      res.json(sortByAlphabet())
+      break
+    case 'price':
+      res.json(sortByPrice())
+      break
+    default:
+      res.json(data)
+  }
 })
 
 server.use('/api/', (req, res) => {

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
-import { setCurrency } from '../../redux/reducers/shopping'
+import { setCurrency, getSortedListAZ, getSortedListPrice } from '../../redux/reducers/shopping'
 
 const Header = () => {
   const dispatch = useDispatch()
@@ -14,10 +14,18 @@ const Header = () => {
       <div className="flex flex-col text-xs md:text-base text-white items-center">
         Sort by:
         <div className="flex">
-          <button type="button" className="px-1 font-semibold">
+          <button
+            type="button"
+            className="px-1 font-semibold"
+            onClick={() => dispatch(getSortedListPrice())}
+            >
             Price
           </button>
-          <button type="button" className="px-1 font-semibold">
+          <button
+          type="button"
+          className="px-1 font-semibold"
+          onClick={() => dispatch(getSortedListAZ())}
+          >
             A-Z
           </button>
         </div>
