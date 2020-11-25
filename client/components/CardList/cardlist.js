@@ -22,6 +22,7 @@ const CardList = (props) => {
             description={it.description}
             amount={amount}
             currency={props.currency}
+            currencyCoefficient={props.currencyCoefficient}
           />
         )
       })}

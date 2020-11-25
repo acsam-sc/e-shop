@@ -3,7 +3,11 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
-import { setCurrency, getSortedListAZ, getSortedListPrice } from '../../redux/reducers/shopping'
+import {
+  getSortedListAZ,
+  getSortedListPrice,
+  getCurrencyCoefficient
+} from '../../redux/reducers/shopping'
 
 const Header = (props) => {
   const dispatch = useDispatch()
@@ -19,14 +23,14 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(getSortedListPrice())}
+            onClick={() => dispatch(getSortedListPrice(props.requestURL))}
           >
             Price
           </button>
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(getSortedListAZ())}
+            onClick={() => dispatch(getSortedListAZ(props.requestURL))}
           >
             A-Z
           </button>
@@ -38,7 +42,7 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(setCurrency('USD'))}
+            onClick={() => dispatch(getCurrencyCoefficient('USD'))}
           >
             USD
           </button>
@@ -46,7 +50,7 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(setCurrency('EUR'))}
+            onClick={() => dispatch(getCurrencyCoefficient('EUR'))}
           >
             EUR
           </button>
@@ -54,7 +58,7 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(setCurrency('CAD'))}
+            onClick={() => dispatch(getCurrencyCoefficient('CAD'))}
           >
             CAD
           </button>

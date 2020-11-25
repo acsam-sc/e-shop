@@ -5,12 +5,13 @@ import bodyParser from 'body-parser'
 import sockjs from 'sockjs'
 import { renderToStaticNodeStream } from 'react-dom/server'
 import React from 'react'
+import axios from 'axios'
 
 import cookieParser from 'cookie-parser'
 import config from './config'
 import Html from '../client/html'
 
-const { readFile } = require('fs').promises
+const { readFile, writeFile } = require('fs').promises
 
 const Root = () => ''
 
@@ -37,10 +38,27 @@ const server = express()
 
 const goodsFile = `${__dirname}/goods_small.json`
 
+const writeGoodsFile = async (data) =>
+  writeFile(goodsFile, JSON.stringify(data), { encoding: 'utf8' })
+
 const readGoodsFile = async () => {
   const fileData = await readFile(goodsFile, { encoding: 'utf-8' })
     .then((data) => JSON.parse(data))
-    .catch((err) => err)
+    .catch((err) => {
+      if (err.code === 'ENOENT') {
+        const resData = axios(
+          'https://raw.githubusercontent.com/ovasylenko/skillcrcuial-ecommerce-test-data/master/data.json'
+        )
+          .then(({ data }) => {
+            writeGoodsFile(data)
+            return data
+          })
+          // eslint-disable-next-line no-console
+          .catch((errAxios) => console.log(`Error in axios: ${errAxios}`))
+        return resData
+      }
+      return err
+    })
   return fileData
 }
 

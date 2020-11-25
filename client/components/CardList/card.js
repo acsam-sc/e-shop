@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { addItemToCart } from '../../redux/reducers/shopping'
 import './card.styles.scss'
 
-const Card = ({ id, image, title, price, description, amount, currency }) => {
+const Card = ({ id, image, title, price, description, amount, currency, currencyCoefficient }) => {
   const dispatch = useDispatch()
 
   return (
@@ -16,7 +16,7 @@ const Card = ({ id, image, title, price, description, amount, currency }) => {
         <div className="flex justify-between">
           <span className="card__title">{title}</span>
           <span className="card__price">
-            {price} {currency}
+            {price * currencyCoefficient} {currency}
           </span>
         </div>
         <span className="card__description">{description}</span>
