@@ -18,15 +18,30 @@ const setProductList = (productList) => ({ type: SET_PRODUCT_LIST, payload: prod
 const setFetchingStatus = (status) => ({ type: SET_FETCHING_STATUS, payload: status })
 const setError = (error) => ({ type: SET_ERROR, payload: error })
 
-export const addItemToCart = (itemId) => ({ type: ADD_ITEM_TO_CART, payload: itemId })
+export const addItemToCart = (itemId, amount) => ({
+  type: ADD_ITEM_TO_CART,
+  payload: { itemId, amount }
+})
 export const setCurrency = (currency) => ({ type: SET_CURRENCY, payload: currency })
 
 const shoppingReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_ITEM_TO_CART: {
+      if (state.itemsInCart.filter((it) => it.id === action.payload.itemId).length > 0) {
+        return {
+          ...state,
+          itemsInCart: state.itemsInCart.map((item) => {
+            if (item.id === action.payload.itemId) return { ...item, amount: action.payload.amount }
+            return item
+          })
+        }
+      }
       return {
         ...state,
-        itemsInCart: [...state.itemsInCart, action.payload]
+        itemsInCart: state.itemsInCart.concat({
+          id: action.payload.itemId,
+          amount: action.payload.amount
+        })
       }
     }
     case SET_FETCHING_STATUS: {

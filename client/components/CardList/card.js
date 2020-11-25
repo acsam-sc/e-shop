@@ -20,19 +20,21 @@ const Card = ({ id, image, title, price, description, amount, currency }) => {
           </span>
         </div>
         <span className="card__description">{description}</span>
-        {amount > 0 && (
-          <span className="card__product-amount">
-            (You have {amount} {amount > 1 ? 'pieces' : 'piece'} of this product in your &nbsp;
-            <Link to="/basket">Cart</Link>)
-          </span>
-        )}
-        <button
-          className="flex self-end mt-auto bg-gray-400 w-auto whitespace-nowrap text-sm px-2"
-          type="button"
-          onClick={() => dispatch(addItemToCart(id))}
-        >
-          Add to Cart
-        </button>
+        <div className="flex flex-row mt-auto justify-between items-center">
+          {amount > 0 && (
+            <span className="card__product-amount">
+              ({amount} {amount > 1 ? 'pieces' : 'piece'} in your&nbsp;
+              <Link to="/basket">Cart</Link>)
+            </span>
+          )}
+          <button
+            className="flex ml-auto bg-gray-400 w-auto whitespace-nowrap text-sm px-2"
+            type="button"
+            onClick={() => dispatch(addItemToCart(id, amount + 1))}
+          >
+            Add to Cart
+          </button>
+        </div>
       </div>
     </div>
   )

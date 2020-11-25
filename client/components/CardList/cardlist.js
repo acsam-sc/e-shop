@@ -8,12 +8,9 @@ const CardList = (props) => {
       <div className="flex md:text-2xl font-bold w-full justify-center p-4">Our Products</div>
       {props.productsArray.map((it) => {
         let amount = 0
-        if (props.itemsInCartArray.includes(it.id)) {
-          amount = props.itemsInCartArray.reduce((acc, item) => {
-            const count = acc
-            if (it.id === item) return count + 1
-            return acc
-          }, 0)
+        const itemArr = props.itemsInCartArray.filter((item) => item.id === it.id)
+        if (itemArr.length > 0) {
+          amount = itemArr[0].amount
         }
         return (
           <Card
