@@ -130,6 +130,7 @@ export const getCurrencyCoefficient = (currency) => async (dispatch) => {
       const coefficient = await reqCurrencyCoefficient(currency)
       dispatch(setFetchingStatus(false))
       dispatch(setCurrency(currency))
+      console.log('coefficient.data.rates', coefficient.data.rates, 'coefficient.data.rates[currency]', coefficient.data.rates[currency])
       dispatch(setCurrencyCoefficient(coefficient.data.rates[currency]))
     } catch (err) {
       dispatch(setFetchingStatus(false))
