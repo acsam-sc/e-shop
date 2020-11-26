@@ -5,7 +5,7 @@ export const reqProducts = (query) => {
   return response
 }
 
-export const reqCurrencyCoefficient = (currency) => {
-  const response = axios.get(`https://api.exchangeratesapi.io/latest?symbols=${currency}`)
+export const reqCurrencyCoefficient = (requestURL, currency) => {
+  const response = axios.get(`${requestURL}/api/v1/exchangerate?currency=${currency}`)
   return response
 }

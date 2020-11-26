@@ -60,7 +60,7 @@ const shoppingReducer = (state = initialState, action) => {
     case SET_REQUEST_URL: {
       return {
         ...state,
-        requestURL: `${action.payload}/api/v1/products?`
+        requestURL: action.payload
       }
     }
     case SET_FETCHING_STATUS: {
@@ -85,6 +85,12 @@ const shoppingReducer = (state = initialState, action) => {
       return {
         ...state,
         currency: action.payload
+      }
+    }
+    case SET_CURRENCY_COEFFICIENT: {
+      return {
+        ...state,
+        currencyCoefficient: action.payload
       }
     }
     case SET_SUMMARY_ITEMS: {
@@ -120,17 +126,16 @@ export const setRequestUrl = (requestURL) => async (dispatch) => {
   dispatch(getProductsList(`${requestURL}/api/v1/products`))
 }
 
-export const getCurrencyCoefficient = (currency) => async (dispatch) => {
+export const getCurrencyCoefficient = (requestURL, currency) => async (dispatch) => {
   if (currency === 'EUR') {
     dispatch(setCurrency(currency))
     dispatch(setCurrencyCoefficient(1))
   } else {
     dispatch(setFetchingStatus(true))
     try {
-      const coefficient = await reqCurrencyCoefficient(currency)
+      const coefficient = await reqCurrencyCoefficient(requestURL, currency)
       dispatch(setFetchingStatus(false))
       dispatch(setCurrency(currency))
-      console.log('coefficient.data.rates', coefficient.data.rates, 'coefficient.data.rates[currency]', coefficient.data.rates[currency])
       dispatch(setCurrencyCoefficient(coefficient.data.rates[currency]))
     } catch (err) {
       dispatch(setFetchingStatus(false))
@@ -146,8 +151,8 @@ export const addItemToCart = (itemId, amount) => async (dispatch) => {
   dispatch(setSummaryItems())
 }
 
-export const getSortedListAZ = (requestURL) => getProductsList(`${requestURL}sortby=a-z`)
+export const getSortedListAZ = (requestURL) => getProductsList(`${requestURL}/api/v1/products?sortby=a-z`)
 
-export const getSortedListPrice = (requestURL) => getProductsList(`${requestURL}sortby=price`)
+export const getSortedListPrice = (requestURL) => getProductsList(`${requestURL}/api/v1/products?sortby=price`)
 
 export default shoppingReducer

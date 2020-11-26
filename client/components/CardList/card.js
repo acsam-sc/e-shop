@@ -16,7 +16,7 @@ const Card = ({ id, image, title, price, description, amount, currency, currency
         <div className="flex justify-between">
           <span className="card__title">{title}</span>
           <span className="card__price">
-            {price * currencyCoefficient} {currency}
+            {(price * currencyCoefficient).toFixed(2)} {currency}
           </span>
         </div>
         <span className="card__description">{description}</span>

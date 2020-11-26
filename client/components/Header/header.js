@@ -42,7 +42,7 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(getCurrencyCoefficient('USD'))}
+            onClick={() => dispatch(getCurrencyCoefficient(props.requestURL, 'USD'))}
           >
             USD
           </button>
@@ -50,7 +50,7 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(getCurrencyCoefficient('EUR'))}
+            onClick={() => dispatch(getCurrencyCoefficient(props.requestURL, 'EUR'))}
           >
             EUR
           </button>
@@ -58,7 +58,7 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(getCurrencyCoefficient('CAD'))}
+            onClick={() => dispatch(getCurrencyCoefficient(props.requestURL, 'CAD'))}
           >
             CAD
           </button>
