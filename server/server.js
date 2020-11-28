@@ -87,7 +87,13 @@ server.get('/api/v1/products', async (req, res) => {
     return 0
   }
 
-  const sortByAlphabet = () => {
+  const compareZA = (a, b) => {
+    if (a.title > b.title) return -1
+    if (a.title < b.title) return 1
+    return 0
+  }
+
+  const sortAZ = () => {
     const titlesArray = data
       .map((it, index) => {
         return { index, title: it.title }
@@ -96,20 +102,44 @@ server.get('/api/v1/products', async (req, res) => {
     return titlesArray.map((it) => data[it.index])
   }
 
-  const sortByPrice = () => {
+  const sortZA = () => {
     const titlesArray = data
+      .map((it, index) => {
+        return { index, title: it.title }
+      })
+      .sort(compareZA)
+    return titlesArray.map((it) => data[it.index])
+  }
+
+  const sortByPriceLowHigh = () => {
+    const pricesArray = data
       .map((it, index) => {
         return { index, price: it.price }
       })
       .sort((a, b) => a.price - b.price)
-    return titlesArray.map((it) => data[it.index])
+    return pricesArray.map((it) => data[it.index])
+  }
+
+  const sortByPriceHighLow = () => {
+    const pricesArray = data
+      .map((it, index) => {
+        return { index, price: it.price }
+      })
+      .sort((a, b) => b.price - a.price)
+    return pricesArray.map((it) => data[it.index])
   }
   switch (req.query.sortby) {
     case 'a-z':
-      res.json(sortByAlphabet())
+      res.json(sortAZ())
       break
-    case 'price':
-      res.json(sortByPrice())
+    case 'z-a':
+      res.json(sortZA())
+      break
+    case 'priceAsc':
+      res.json(sortByPriceLowHigh())
+      break
+    case 'priceDesc':
+      res.json(sortByPriceHighLow())
       break
     default:
       res.json(data)

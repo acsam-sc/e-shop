@@ -16,6 +16,8 @@ const App = () => {
   const cartItemsSummary = useSelector((state) => state.shoppingReducer.cartItemsSummary)
   const currencyCoefficient = useSelector((state) => state.shoppingReducer.currencyCoefficient)
   const requestURL = useSelector((state) => state.shoppingReducer.requestURL)
+  const isSortedPriceAsc = useSelector((state) => state.shoppingReducer.isSortedPriceAsc)
+  const isSortedAZ = useSelector((state) => state.shoppingReducer.isSortedAZ)
 
   useEffect(() => {
     dispatch(setRequestUrl(serverURL))
@@ -25,7 +27,12 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen w-auto">
       <Head title="Hello" />
-      <Header cartItemsSummary={cartItemsSummary} requestURL={requestURL} />
+      <Header
+        cartItemsSummary={cartItemsSummary}
+        requestURL={requestURL}
+        isSortedPriceAsc={isSortedPriceAsc}
+        isSortedAZ={isSortedAZ}
+      />
       <CardList
         productsArray={productsArray}
         currency={currency}

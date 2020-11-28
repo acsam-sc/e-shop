@@ -4,13 +4,21 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import {
-  getSortedListAZ,
-  getSortedListPrice,
+  setPriceSorting,
+  setAZSorting,
   getCurrencyCoefficient
 } from '../../redux/reducers/shopping'
 
 const Header = (props) => {
   const dispatch = useDispatch()
+
+  const handlePriceSortClick = () => {
+    dispatch(setPriceSorting(props.requestURL, props.isSortedPriceAsc))
+  }
+
+  const handleAZSortClick = () => {
+    dispatch(setAZSorting(props.requestURL, props.isSortedAZ))
+  }
 
   return (
     <div className="flex flex-row w-full h-16 bg-black justify-between items-center px-4">
@@ -23,16 +31,12 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(getSortedListPrice(props.requestURL))}
+            onClick={() => handlePriceSortClick()}
           >
-            Price
+            Price {props.isSortedPriceAsc ? <span>&#8593;</span> : <span>&#8595;</span>}
           </button>
-          <button
-            type="button"
-            className="px-1 font-semibold"
-            onClick={() => dispatch(getSortedListAZ(props.requestURL))}
-          >
-            A-Z
+          <button type="button" className="px-1 font-semibold" onClick={() => handleAZSortClick()}>
+            {props.isSortedAZ ? 'Z-A' : 'A-Z'}
           </button>
         </div>
       </div>
