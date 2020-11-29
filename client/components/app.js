@@ -1,45 +1,60 @@
 import React, { useEffect } from 'react'
+import { Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Head from './head'
 import Header from './Header/header'
 import CardList from './CardList/cardlist'
-import { setRequestUrl } from '../redux/reducers/shopping'
+import Basket from './Basket/basket'
+import Footer from './Footer/footer'
+import { getProductsList } from '../redux/reducers/shopping'
 
 const App = () => {
   const dispatch = useDispatch()
 
-  // const serverURL = window.location.origin
-  const serverURL = window.location.origin
   const productsArray = useSelector((state) => state.shoppingReducer.productList)
   const currency = useSelector((state) => state.shoppingReducer.currency)
   const itemsInCartArray = useSelector((state) => state.shoppingReducer.itemsInCart)
   const cartItemsSummary = useSelector((state) => state.shoppingReducer.cartItemsSummary)
   const currencyCoefficient = useSelector((state) => state.shoppingReducer.currencyCoefficient)
-  const requestURL = useSelector((state) => state.shoppingReducer.requestURL)
   const isSortedPriceAsc = useSelector((state) => state.shoppingReducer.isSortedPriceAsc)
   const isSortedAZ = useSelector((state) => state.shoppingReducer.isSortedAZ)
 
   useEffect(() => {
-    dispatch(setRequestUrl(serverURL))
-    // dispatch(getProductsList())
-  }, [dispatch, serverURL])
+    dispatch(getProductsList('/api/v1/products'))
+  }, [dispatch])
 
   return (
-    <div className="flex flex-col min-h-screen w-auto">
+    <div className="flex flex-col min-h-screen w-auto items-center">
       <Head title="Hello" />
       <Header
         cartItemsSummary={cartItemsSummary}
-        requestURL={requestURL}
         isSortedPriceAsc={isSortedPriceAsc}
         isSortedAZ={isSortedAZ}
       />
-      <CardList
-        productsArray={productsArray}
-        currency={currency}
-        currencyCoefficient={currencyCoefficient}
-        itemsInCartArray={itemsInCartArray}
-      />
-      {/* <Footer /> */}
+      <Route exact path="/" component={() =>
+        <CardList
+          productsArray={productsArray}
+          currency={currency}
+          currencyCoefficient={currencyCoefficient}
+          itemsInCartArray={itemsInCartArray}
+        />
+      } />
+      <Route exact path="/basket" component={() =>
+        <Basket
+          currency={currency}
+          currencyCoefficient={currencyCoefficient}
+          itemsInCartArray={itemsInCartArray}
+          isSortedPriceAsc={isSortedPriceAsc}
+          isSortedAZ={isSortedAZ}
+        />
+      } />
+      <Route exact path="/basket" component={() =>
+        <Footer
+          currency={currency}
+          currencyCoefficient={currencyCoefficient}
+          itemsInCartArray={itemsInCartArray}
+        />
+      } />
     </div>
   )
 }

@@ -1,8 +1,8 @@
 import React from 'react'
-// import data from '../../../server/goods_small.json'
 import Card from './card'
 
 const CardList = (props) => {
+
   return (
     <div className="flex flex-grow flex-wrap w-full justify-center">
       <div className="flex md:text-2xl font-bold w-full justify-center p-4">Our Products</div>
@@ -15,11 +15,7 @@ const CardList = (props) => {
         return (
           <Card
             key={it.id}
-            id={it.id}
-            title={it.title}
-            image={it.image}
-            price={it.price}
-            description={it.description}
+            it={it}
             amount={amount}
             currency={props.currency}
             currencyCoefficient={props.currencyCoefficient}

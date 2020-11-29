@@ -1,0 +1,48 @@
+.card__image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.card__price {
+  white-space: nowrap;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  @media (min-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.5rem
+  }
+}
+
+.card__title {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  @media (min-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.5rem
+  }
+}
+
+.card__description {
+  display: flex;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  @media (min-width: 768px) {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}
+
+.card__product-amount {
+  display: flex;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  @media (min-width: 768px) {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+}

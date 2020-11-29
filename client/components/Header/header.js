@@ -13,11 +13,11 @@ const Header = (props) => {
   const dispatch = useDispatch()
 
   const handlePriceSortClick = () => {
-    dispatch(setPriceSorting(props.requestURL, props.isSortedPriceAsc))
+    dispatch(setPriceSorting(props.isSortedPriceAsc))
   }
 
   const handleAZSortClick = () => {
-    dispatch(setAZSorting(props.requestURL, props.isSortedAZ))
+    dispatch(setAZSorting(props.isSortedAZ))
   }
 
   return (
@@ -46,7 +46,7 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(getCurrencyCoefficient(props.requestURL, 'USD'))}
+            onClick={() => dispatch(getCurrencyCoefficient('USD'))}
           >
             USD
           </button>
@@ -54,7 +54,7 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(getCurrencyCoefficient(props.requestURL, 'EUR'))}
+            onClick={() => dispatch(getCurrencyCoefficient('EUR'))}
           >
             EUR
           </button>
@@ -62,7 +62,7 @@ const Header = (props) => {
           <button
             type="button"
             className="px-1 font-semibold"
-            onClick={() => dispatch(getCurrencyCoefficient(props.requestURL, 'CAD'))}
+            onClick={() => dispatch(getCurrencyCoefficient('CAD'))}
           >
             CAD
           </button>

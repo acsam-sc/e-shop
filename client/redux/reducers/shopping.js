@@ -1,18 +1,17 @@
 import { reqProducts, reqCurrencyCoefficient } from '../../api/api'
 
 const ADD_ITEM_TO_CART = 'e-shop/ADD_ITEM_TO_CART'
+const DECREASE_ITEM_QUANTITY = 'e-shop/DECREASE_ITEM_QUANTITY'
 const SET_FETCHING_STATUS = 'e-shop/SET_FETCHING_STATUS'
 const SET_ERROR = 'e-shop/SET_ERROR'
 const SET_PRODUCT_LIST = 'e-shop/SET_PRODUCT_LIST'
 const SET_CURRENCY = 'e-shop/SET_CURRENCY'
 const SET_SUMMARY_ITEMS = 'e-shop/SET_SUMMARY_ITEMS'
 const SET_CURRENCY_COEFFICIENT = 'e-shop/SET_CURRENCY_COEFFICIENT'
-const SET_REQUEST_URL = 'e-shop/SET_REQUEST_URL'
 const SET_PRICE_SORTING = 'e-shop/SET_PRICE_SORTING'
 const SET_AZ_SORTING = 'e-shop/SET_AZ_SORTING'
 
 const initialState = {
-  requestURL: 'http://127.0.0.1/api/v1/products?',
   isFetching: false,
   currency: 'EUR',
   error: null,
@@ -37,11 +36,15 @@ const setCurrencyCoefficient = (coefficient) => ({
   type: SET_CURRENCY_COEFFICIENT,
   payload: coefficient
 })
-const setRequestUrlAC = (requestURL) => ({ type: SET_REQUEST_URL, payload: requestURL })
 
-const addItemToCartAC = (itemId, amount) => ({
+const addItemToCartAC = (item, amount) => ({
   type: ADD_ITEM_TO_CART,
-  payload: { itemId, amount }
+  payload: { item, amount }
+})
+
+const decreaseItemQuantityAC = (item, amount) => ({
+  type: DECREASE_ITEM_QUANTITY,
+  payload: { item, amount }
 })
 
 export const setCurrency = (currency) => ({ type: SET_CURRENCY, payload: currency })
@@ -49,11 +52,11 @@ export const setCurrency = (currency) => ({ type: SET_CURRENCY, payload: currenc
 const shoppingReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_ITEM_TO_CART: {
-      if (state.itemsInCart.filter((it) => it.id === action.payload.itemId).length > 0) {
+      if (state.itemsInCart.filter((it) => it.id === action.payload.item.id).length > 0) {
         return {
           ...state,
           itemsInCart: state.itemsInCart.map((item) => {
-            if (item.id === action.payload.itemId) return { ...item, amount: action.payload.amount }
+            if (item.id === action.payload.item.id) return { ...item, amount: action.payload.amount }
             return item
           })
         }
@@ -61,15 +64,18 @@ const shoppingReducer = (state = initialState, action) => {
       return {
         ...state,
         itemsInCart: state.itemsInCart.concat({
-          id: action.payload.itemId,
+          ...action.payload.item,
           amount: action.payload.amount
         })
       }
     }
-    case SET_REQUEST_URL: {
+    case DECREASE_ITEM_QUANTITY: {
       return {
         ...state,
-        requestURL: action.payload
+        itemsInCart: state.itemsInCart.map((item) => {
+          if (item.id === action.payload.item.id) return { ...item, amount: action.payload.amount }
+          return item
+        })
       }
     }
     case SET_FETCHING_STATUS: {
@@ -142,19 +148,14 @@ export const getProductsList = (query) => async (dispatch) => {
   }
 }
 
-export const setRequestUrl = (requestURL) => async (dispatch) => {
-  dispatch(setRequestUrlAC(requestURL))
-  dispatch(getProductsList(`${requestURL}/api/v1/products`))
-}
-
-export const getCurrencyCoefficient = (requestURL, currency) => async (dispatch) => {
+export const getCurrencyCoefficient = (currency) => async (dispatch) => {
   if (currency === 'EUR') {
     dispatch(setCurrency(currency))
     dispatch(setCurrencyCoefficient(1))
   } else {
     dispatch(setFetchingStatus(true))
     try {
-      const coefficient = await reqCurrencyCoefficient(requestURL, currency)
+      const coefficient = await reqCurrencyCoefficient(currency)
       dispatch(setFetchingStatus(false))
       dispatch(setCurrency(currency))
       dispatch(setCurrencyCoefficient(coefficient.data.rates[currency]))
@@ -167,39 +168,51 @@ export const getCurrencyCoefficient = (requestURL, currency) => async (dispatch)
   }
 }
 
-export const addItemToCart = (itemId, amount) => async (dispatch) => {
-  dispatch(addItemToCartAC(itemId, amount))
+export const addItemToCart = (item, amount) => async (dispatch) => {
+  dispatch(addItemToCartAC(item, amount))
   dispatch(setSummaryItems())
 }
 
-export const getSortedListAZ = (requestURL) =>
-  getProductsList(`${requestURL}/api/v1/products?sortby=a-z`)
+// export const removeItemFromCart = (item) => async (dispatch) => {
+//   dispatch(removeItemFromCartAC(item))
+//   dispatch(setSummaryItems())
+// }
 
-export const getSortedListPriceAsc = (requestURL) =>
-  getProductsList(`${requestURL}/api/v1/products?sortby=priceAsc`)
-
-export const getSortedListZA = (requestURL) =>
-  getProductsList(`${requestURL}/api/v1/products?sortby=z-a`)
-
-export const getSortedListPriceDesc = (requestURL) =>
-  getProductsList(`${requestURL}/api/v1/products?sortby=priceDesc`)
-
-export const setPriceSorting = (requestURL, isSortedPriceAsc) => async (dispatch) => {
-  if (isSortedPriceAsc) {
-    dispatch(setPriceSortingAC(false))
-    dispatch(getSortedListPriceAsc(requestURL))
-  } else {
-    dispatch(setPriceSortingAC(true))
-    dispatch(getSortedListPriceDesc(requestURL))
+export const decreaseItemQuantity = (item, amount) => async (dispatch) => {
+  if (amount >= 0) {
+    dispatch(decreaseItemQuantityAC(item, amount))
+    dispatch(setSummaryItems())
   }
 }
 
-export const setAZSorting = (requestURL, isSortedAZ) => async (dispatch) => {
+export const getSortedListAZ = () =>
+  getProductsList('/api/v1/products?sortby=a-z')
+
+export const getSortedListPriceAsc = () =>
+  getProductsList('/api/v1/products?sortby=priceAsc')
+
+export const getSortedListZA = () =>
+  getProductsList('/api/v1/products?sortby=z-a')
+
+export const getSortedListPriceDesc = () =>
+  getProductsList('/api/v1/products?sortby=priceDesc')
+
+export const setPriceSorting = (isSortedPriceAsc) => async (dispatch) => {
+  if (isSortedPriceAsc) {
+    dispatch(getSortedListPriceAsc())
+    dispatch(setPriceSortingAC(false))
+  } else {
+    dispatch(getSortedListPriceDesc())
+    dispatch(setPriceSortingAC(true))
+  }
+}
+
+export const setAZSorting = (isSortedAZ) => async (dispatch) => {
   if (isSortedAZ) {
-    dispatch(getSortedListZA(requestURL))
+    dispatch(getSortedListZA())
     dispatch(setAZSortingAC(false))
   } else {
-    dispatch(getSortedListAZ(requestURL))
+    dispatch(getSortedListAZ())
     dispatch(setAZSortingAC(true))
   }
 }
