@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = (props) => {
   return (
-    <div className="flex fixed bottom-0 w-full h-12 justify-end md:px-24 font-bold md:text-2xl bg-white border-t-2">
+    <div className="flex fixed bottom-0 w-full h-12 justify-end md:px-24 font-bold md:text-2xl bg-white border-t-2 items-center">
       Order total:{' '}
       {props.itemsInCartArray.reduce((acc, item) => {
         const total = acc
