@@ -22,7 +22,7 @@ const BasketItem = ({ it, currency, currencyCoefficient }) => {
         <div className="flex flex-row mt-auto justify-between items-center">
           {it.amount > 0 && (
             <span className="card__product-amount">
-              (Summary: {it.amount * it.price * currencyCoefficient} {currency})
+              (Summary: {(it.amount * it.price * currencyCoefficient).toFixed(2)} {currency})
             </span>
           )}
           <div className="flex ml-auto w-auto whitespace-nowrap text-sm px-2">
