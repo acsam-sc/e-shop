@@ -31,30 +31,42 @@ const App = () => {
         isSortedPriceAsc={isSortedPriceAsc}
         isSortedAZ={isSortedAZ}
       />
-      <Route exact path="/" component={() =>
-        <CardList
-          productsArray={productsArray}
-          currency={currency}
-          currencyCoefficient={currencyCoefficient}
-          itemsInCartArray={itemsInCartArray}
-        />
-      } />
-      <Route exact path="/basket" component={() =>
-        <Basket
-          currency={currency}
-          currencyCoefficient={currencyCoefficient}
-          itemsInCartArray={itemsInCartArray}
-          isSortedPriceAsc={isSortedPriceAsc}
-          isSortedAZ={isSortedAZ}
-        />
-      } />
-      <Route exact path="/basket" component={() =>
-        <Footer
-          currency={currency}
-          currencyCoefficient={currencyCoefficient}
-          itemsInCartArray={itemsInCartArray}
-        />
-      } />
+      <Route
+        exact
+        path="/"
+        component={() => (
+          <CardList
+            productsArray={productsArray}
+            currency={currency}
+            currencyCoefficient={currencyCoefficient}
+            itemsInCartArray={itemsInCartArray}
+          />
+        )}
+      />
+      <Route
+        exact
+        path="/basket"
+        component={() => (
+          <Basket
+            currency={currency}
+            currencyCoefficient={currencyCoefficient}
+            itemsInCartArray={itemsInCartArray}
+            isSortedPriceAsc={isSortedPriceAsc}
+            isSortedAZ={isSortedAZ}
+          />
+        )}
+      />
+      <Route
+        exact
+        path="/basket"
+        component={() => (
+          <Footer
+            currency={currency}
+            currencyCoefficient={currencyCoefficient}
+            itemsInCartArray={itemsInCartArray}
+          />
+        )}
+      />
     </div>
   )
 }

@@ -2,7 +2,6 @@ import React from 'react'
 import Card from './card'
 
 const CardList = (props) => {
-
   return (
     <div className="flex flex-grow flex-wrap w-full justify-center">
       <div className="flex md:text-2xl font-bold w-full justify-center p-4">Our Products</div>

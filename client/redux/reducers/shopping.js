@@ -56,7 +56,8 @@ const shoppingReducer = (state = initialState, action) => {
         return {
           ...state,
           itemsInCart: state.itemsInCart.map((item) => {
-            if (item.id === action.payload.item.id) return { ...item, amount: action.payload.amount }
+            if (item.id === action.payload.item.id)
+              return { ...item, amount: action.payload.amount }
             return item
           })
         }
@@ -185,17 +186,13 @@ export const decreaseItemQuantity = (item, amount) => async (dispatch) => {
   }
 }
 
-export const getSortedListAZ = () =>
-  getProductsList('/api/v1/products?sortby=a-z')
+export const getSortedListAZ = () => getProductsList('/api/v1/products?sortby=a-z')
 
-export const getSortedListPriceAsc = () =>
-  getProductsList('/api/v1/products?sortby=priceAsc')
+export const getSortedListPriceAsc = () => getProductsList('/api/v1/products?sortby=priceAsc')
 
-export const getSortedListZA = () =>
-  getProductsList('/api/v1/products?sortby=z-a')
+export const getSortedListZA = () => getProductsList('/api/v1/products?sortby=z-a')
 
-export const getSortedListPriceDesc = () =>
-  getProductsList('/api/v1/products?sortby=priceDesc')
+export const getSortedListPriceDesc = () => getProductsList('/api/v1/products?sortby=priceDesc')
 
 export const setPriceSorting = (isSortedPriceAsc) => async (dispatch) => {
   if (isSortedPriceAsc) {

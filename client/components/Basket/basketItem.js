@@ -31,7 +31,7 @@ const BasketItem = ({ it, currency, currencyCoefficient }) => {
               type="button"
               onClick={() => dispatch(addItemToCart(it, it.amount + 1))}
             >
-            +
+              +
             </button>
             <span className="flex px-2">{it.amount}</span>
             <button
@@ -39,7 +39,7 @@ const BasketItem = ({ it, currency, currencyCoefficient }) => {
               type="button"
               onClick={() => dispatch(decreaseItemQuantity(it, it.amount - 1))}
             >
-            -
+              -
             </button>
           </div>
         </div>
