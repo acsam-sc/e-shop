@@ -8,8 +8,7 @@ const SET_PRODUCT_LIST = 'e-shop/SET_PRODUCT_LIST'
 const SET_CURRENCY = 'e-shop/SET_CURRENCY'
 const SET_SUMMARY_ITEMS = 'e-shop/SET_SUMMARY_ITEMS'
 const SET_CURRENCY_COEFFICIENT = 'e-shop/SET_CURRENCY_COEFFICIENT'
-const SET_PRICE_SORTING = 'e-shop/SET_PRICE_SORTING'
-const SET_AZ_SORTING = 'e-shop/SET_AZ_SORTING'
+const SET_SORTING = 'e-shop/SET_SORTING'
 
 const initialState = {
   isFetching: false,
@@ -19,19 +18,14 @@ const initialState = {
   itemsInCart: [],
   cartItemsSummary: 0,
   currencyCoefficient: 1,
-  isSortedPriceAsc: false,
-  isSortedAZ: false
+  sortedBy: null
 }
 
 const setProductList = (productList) => ({ type: SET_PRODUCT_LIST, payload: productList })
 const setFetchingStatus = (status) => ({ type: SET_FETCHING_STATUS, payload: status })
 const setError = (error) => ({ type: SET_ERROR, payload: error })
 const setSummaryItems = () => ({ type: SET_SUMMARY_ITEMS })
-const setPriceSortingAC = (isSortedPriceAsc) => ({
-  type: SET_PRICE_SORTING,
-  payload: isSortedPriceAsc
-})
-const setAZSortingAC = (isSortedAZ) => ({ type: SET_AZ_SORTING, payload: isSortedAZ })
+const setSortingAC = (sortedBy) => ({ type: SET_SORTING, payload: sortedBy })
 const setCurrencyCoefficient = (coefficient) => ({
   type: SET_CURRENCY_COEFFICIENT,
   payload: coefficient
@@ -109,16 +103,10 @@ const shoppingReducer = (state = initialState, action) => {
         currencyCoefficient: action.payload
       }
     }
-    case SET_PRICE_SORTING: {
+    case SET_SORTING: {
       return {
         ...state,
-        isSortedPriceAsc: action.payload
-      }
-    }
-    case SET_AZ_SORTING: {
-      return {
-        ...state,
-        isSortedAZ: action.payload
+        sortedBy: action.payload
       }
     }
     case SET_SUMMARY_ITEMS: {
@@ -194,23 +182,25 @@ export const getSortedListZA = () => getProductsList('/api/v1/products?sortby=z-
 
 export const getSortedListPriceDesc = () => getProductsList('/api/v1/products?sortby=priceDesc')
 
-export const setPriceSorting = (isSortedPriceAsc) => async (dispatch) => {
-  if (isSortedPriceAsc) {
-    dispatch(getSortedListPriceAsc())
-    dispatch(setPriceSortingAC(false))
-  } else {
-    dispatch(getSortedListPriceDesc())
-    dispatch(setPriceSortingAC(true))
-  }
-}
-
-export const setAZSorting = (isSortedAZ) => async (dispatch) => {
-  if (isSortedAZ) {
-    dispatch(getSortedListZA())
-    dispatch(setAZSortingAC(false))
-  } else {
-    dispatch(getSortedListAZ())
-    dispatch(setAZSortingAC(true))
+export const setSorting = (sortedBy) => async (dispatch) => {
+  switch (sortedBy) {
+    case 'a-z':
+      dispatch(setSortingAC('a-z'))
+      dispatch(getSortedListAZ())
+      break
+    case 'z-a':
+      dispatch(setSortingAC('z-a'))
+      dispatch(getSortedListZA())
+      break
+    case 'priceAsc':
+      dispatch(setSortingAC('priceAsc'))
+      dispatch(getSortedListPriceAsc())
+      break
+    case 'priceDesc':
+      dispatch(setSortingAC('priceDesc'))
+      dispatch(getSortedListPriceDesc())
+      break
+    default:
   }
 }
 

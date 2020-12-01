@@ -16,21 +16,18 @@ const App = () => {
   const itemsInCartArray = useSelector((state) => state.shoppingReducer.itemsInCart)
   const cartItemsSummary = useSelector((state) => state.shoppingReducer.cartItemsSummary)
   const currencyCoefficient = useSelector((state) => state.shoppingReducer.currencyCoefficient)
-  const isSortedPriceAsc = useSelector((state) => state.shoppingReducer.isSortedPriceAsc)
-  const isSortedAZ = useSelector((state) => state.shoppingReducer.isSortedAZ)
+  const sortedBy = useSelector((state) => state.shoppingReducer.sortedBy)
 
   useEffect(() => {
-    dispatch(getProductsList('/api/v1/products'))
-  }, [dispatch])
+    if (sortedBy === null) {
+      dispatch(getProductsList('/api/v1/products'))
+    } else dispatch(getProductsList(`/api/v1/products?sortby=${sortedBy}`))
+  }, [dispatch, sortedBy])
 
   return (
     <div className="flex flex-col min-h-screen w-auto items-center">
       <Head title="Hello" />
-      <Header
-        cartItemsSummary={cartItemsSummary}
-        isSortedPriceAsc={isSortedPriceAsc}
-        isSortedAZ={isSortedAZ}
-      />
+      <Header cartItemsSummary={cartItemsSummary} sortedBy={sortedBy} />
       <Route
         exact
         path="/"
@@ -51,8 +48,7 @@ const App = () => {
             currency={currency}
             currencyCoefficient={currencyCoefficient}
             itemsInCartArray={itemsInCartArray}
-            isSortedPriceAsc={isSortedPriceAsc}
-            isSortedAZ={isSortedAZ}
+            sortedBy={sortedBy}
           />
         )}
       />

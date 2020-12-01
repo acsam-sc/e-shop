@@ -3,21 +3,21 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
-import {
-  setPriceSorting,
-  setAZSorting,
-  getCurrencyCoefficient
-} from '../../redux/reducers/shopping'
+import { setSorting, getCurrencyCoefficient } from '../../redux/reducers/shopping'
 
 const Header = (props) => {
   const dispatch = useDispatch()
 
   const handlePriceSortClick = () => {
-    dispatch(setPriceSorting(props.isSortedPriceAsc))
+    if (props.sortedBy === 'priceDesc') {
+      dispatch(setSorting('priceAsc'))
+    } else dispatch(setSorting('priceDesc'))
   }
 
   const handleAZSortClick = () => {
-    dispatch(setAZSorting(props.isSortedAZ))
+    if (props.sortedBy === 'a-z') {
+      dispatch(setSorting('z-a'))
+    } else dispatch(setSorting('a-z'))
   }
 
   return (
@@ -33,10 +33,10 @@ const Header = (props) => {
             className="px-1 font-semibold"
             onClick={() => handlePriceSortClick()}
           >
-            Price {props.isSortedPriceAsc ? <span>&#8593;</span> : <span>&#8595;</span>}
+            Price {props.sortedBy === 'priceDesc' ? <span>&#8593;</span> : <span>&#8595;</span>}
           </button>
           <button type="button" className="px-1 font-semibold" onClick={() => handleAZSortClick()}>
-            {props.isSortedAZ ? 'Z-A' : 'A-Z'}
+            {props.sortedBy === 'a-z' ? 'Z-A' : 'A-Z'}
           </button>
         </div>
       </div>
