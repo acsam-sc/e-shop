@@ -3,7 +3,7 @@ import axios from 'axios'
 const serverURL = window.location.origin
 
 export const reqProducts = (query) => {
-  const response = axios.get(`${serverURL}${query}`)
+  const response = axios.get(`${serverURL}/api/v1/products?${query}`)
   return response
 }
 

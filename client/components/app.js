@@ -12,17 +12,23 @@ const App = () => {
   const dispatch = useDispatch()
 
   const productsArray = useSelector((state) => state.shoppingReducer.productList)
-  const currency = useSelector((state) => state.shoppingReducer.currency)
   const itemsInCartArray = useSelector((state) => state.shoppingReducer.itemsInCart)
-  const cartItemsSummary = useSelector((state) => state.shoppingReducer.cartItemsSummary)
-  const currencyCoefficient = useSelector((state) => state.shoppingReducer.currencyCoefficient)
-  const sortedBy = useSelector((state) => state.shoppingReducer.sortedBy)
+
+  const {
+    currency,
+    cartItemsSummary,
+    currencyCoefficient,
+    sortedBy,
+    page,
+    count,
+    totalCount
+  } = useSelector((state) => state.shoppingReducer)
 
   useEffect(() => {
-    if (sortedBy === null) {
-      dispatch(getProductsList('/api/v1/products'))
-    } else dispatch(getProductsList(`/api/v1/products?sortby=${sortedBy}`))
-  }, [dispatch, sortedBy])
+    if (sortedBy !== null) {
+      dispatch(getProductsList(`sortby=${sortedBy}&page=${page}&count=${count}`))
+    } else dispatch(getProductsList())
+  }, [dispatch, sortedBy, page, count])
 
   return (
     <div className="flex flex-col min-h-screen w-auto items-center">
@@ -37,6 +43,9 @@ const App = () => {
             currency={currency}
             currencyCoefficient={currencyCoefficient}
             itemsInCartArray={itemsInCartArray}
+            page={page}
+            count={count}
+            totalCount={totalCount}
           />
         )}
       />

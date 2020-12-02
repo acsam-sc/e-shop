@@ -10,6 +10,9 @@ const SET_CURRENCY = 'e-shop/SET_CURRENCY'
 const SET_SUMMARY_ITEMS = 'e-shop/SET_SUMMARY_ITEMS'
 const SET_CURRENCY_COEFFICIENT = 'e-shop/SET_CURRENCY_COEFFICIENT'
 const SET_SORTING = 'e-shop/SET_SORTING'
+const SET_PAGE = 'e-shop/SET_PAGE'
+const SET_COUNT = 'e-shop/SET_COUNT'
+const SET_TOTAL_COUNT = 'e-shop/SET_TOTAL_COUNT'
 
 const initialState = {
   isFetching: false,
@@ -19,7 +22,10 @@ const initialState = {
   itemsInCart: [],
   cartItemsSummary: 0,
   currencyCoefficient: 1,
-  sortedBy: null
+  sortedBy: null,
+  page: 1,
+  count: 20,
+  totalCount: 20
 }
 
 const setProductList = (productList) => ({ type: SET_PRODUCT_LIST, payload: productList })
@@ -27,6 +33,7 @@ const setFetchingStatus = (status) => ({ type: SET_FETCHING_STATUS, payload: sta
 const setError = (error) => ({ type: SET_ERROR, payload: error })
 const setSummaryItems = () => ({ type: SET_SUMMARY_ITEMS })
 const setSortingAC = (sortedBy) => ({ type: SET_SORTING, payload: sortedBy })
+export const setPage = (page) => ({ type: SET_PAGE, payload: page })
 const setCurrencyCoefficient = (coefficient) => ({
   type: SET_CURRENCY_COEFFICIENT,
   payload: coefficient
@@ -47,7 +54,10 @@ const removeItemFromCartAC = (itemId) => ({
   payload: itemId
 })
 
-export const setCurrency = (currency) => ({ type: SET_CURRENCY, payload: currency })
+const setTotalCount = (totalCount) => ({ type: SET_TOTAL_COUNT, payload: totalCount })
+const setCurrency = (currency) => ({ type: SET_CURRENCY, payload: currency })
+
+export const setCount = (count) => ({ type: SET_COUNT, payload: count })
 
 const shoppingReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -121,6 +131,24 @@ const shoppingReducer = (state = initialState, action) => {
         sortedBy: action.payload
       }
     }
+    case SET_PAGE: {
+      return {
+        ...state,
+        page: action.payload
+      }
+    }
+    case SET_COUNT: {
+      return {
+        ...state,
+        count: action.payload
+      }
+    }
+    case SET_TOTAL_COUNT: {
+      return {
+        ...state,
+        totalCount: action.payload
+      }
+    }
     case SET_SUMMARY_ITEMS: {
       return {
         ...state,
@@ -141,7 +169,8 @@ export const getProductsList = (query) => async (dispatch) => {
   try {
     const productsList = await reqProducts(query)
     dispatch(setFetchingStatus(false))
-    dispatch(setProductList(productsList.data))
+    dispatch(setProductList(productsList.data.items))
+    dispatch(setTotalCount(productsList.data.totalCount))
   } catch (err) {
     dispatch(setFetchingStatus(false))
     dispatch(setError('Error getting product list'))
@@ -191,31 +220,20 @@ export const decreaseItemQuantity = (item, amount) => async (dispatch) => {
   }
 }
 
-export const getSortedListAZ = () => getProductsList('/api/v1/products?sortby=a-z')
-
-export const getSortedListPriceAsc = () => getProductsList('/api/v1/products?sortby=priceAsc')
-
-export const getSortedListZA = () => getProductsList('/api/v1/products?sortby=z-a')
-
-export const getSortedListPriceDesc = () => getProductsList('/api/v1/products?sortby=priceDesc')
-
 export const setSorting = (sortedBy) => async (dispatch) => {
+  dispatch(setPage(1))
   switch (sortedBy) {
     case 'a-z':
       dispatch(setSortingAC('a-z'))
-      dispatch(getSortedListAZ())
       break
     case 'z-a':
       dispatch(setSortingAC('z-a'))
-      dispatch(getSortedListZA())
       break
     case 'priceAsc':
       dispatch(setSortingAC('priceAsc'))
-      dispatch(getSortedListPriceAsc())
       break
     case 'priceDesc':
       dispatch(setSortingAC('priceDesc'))
-      dispatch(getSortedListPriceDesc())
       break
     default:
   }

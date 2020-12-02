@@ -45,9 +45,9 @@ const writeGoodsFile = async (data) =>
 const readGoodsFile = async () => {
   const fileData = await readFile(goodsFile, { encoding: 'utf-8' })
     .then((data) => JSON.parse(data))
-    .catch((err) => {
+    .catch(async (err) => {
       if (err.code === 'ENOENT') {
-        const resData = axios(
+        const resData = await axios(
           'https://raw.githubusercontent.com/ovasylenko/skillcrcuial-ecommerce-test-data/master/data.json'
         )
           .then(({ data }) => {
@@ -66,10 +66,10 @@ const readGoodsFile = async () => {
 const readLogFile = async () => {
   const fileData = await readFile(logFile, { encoding: 'utf8' })
     .then((data) => JSON.parse(data))
-    .catch((err) => {
+    .catch(async (err) => {
       if (err.code === 'ENOENT') {
         const dataToWrite = [{ date: +new Date(), action: '===== Log start =====' }]
-        writeFile(logFile, JSON.stringify(dataToWrite), { encoding: 'utf8' })
+        await writeFile(logFile, JSON.stringify(dataToWrite), { encoding: 'utf8' })
         return dataToWrite
       }
       return err
@@ -103,6 +103,7 @@ server.get('/api/v1/exchangerate', async (req, res) => {
 })
 
 server.get('/api/v1/products', async (req, res) => {
+  const { page = 1, count = 20 } = req.query
   const data = await readGoodsFile()
   const compareAZ = (a, b) => {
     if (a.title < b.title) return -1
@@ -151,22 +152,24 @@ server.get('/api/v1/products', async (req, res) => {
       .sort((a, b) => b.price - a.price)
     return pricesArray.map((it) => data[it.index])
   }
-  switch (req.query.sortby) {
-    case 'a-z':
-      res.json(sortAZ())
-      break
-    case 'z-a':
-      res.json(sortZA())
-      break
-    case 'priceAsc':
-      res.json(sortByPriceLowHigh())
-      break
-    case 'priceDesc':
-      res.json(sortByPriceHighLow())
-      break
-    default:
-      res.json(data)
+
+  const sortedItems = () => {
+    switch (req.query.sortby) {
+      case 'a-z':
+        return sortAZ()
+      case 'z-a':
+        return sortZA()
+      case 'priceAsc':
+        return sortByPriceLowHigh()
+      case 'priceDesc':
+        return sortByPriceHighLow()
+      default:
+        return data
+    }
   }
+
+  const portionToSend = sortedItems().slice((page - 1) * count, page * count)
+  res.json({ items: portionToSend, totalCount: data.length })
 })
 
 server.get('/api/v1/logs', async (req, res) => {
