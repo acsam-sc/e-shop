@@ -36,7 +36,7 @@ let connections = []
 const port = process.env.PORT || 8090
 const server = express()
 
-const goodsFile = `${__dirname}/goods_small.json`
+const goodsFile = `${__dirname}/goods.json`
 const logFile = `${__dirname}/logs.json`
 
 const writeGoodsFile = async (data) =>
