@@ -25,9 +25,7 @@ const App = () => {
   } = useSelector((state) => state.shoppingReducer)
 
   useEffect(() => {
-    if (sortedBy !== null) {
-      dispatch(getProductsList(`sortby=${sortedBy}&page=${page}&count=${count}`))
-    } else dispatch(getProductsList())
+    dispatch(getProductsList(`sortby=${sortedBy}&page=${page}&count=${count}`))
   }, [dispatch, sortedBy, page, count])
 
   return (
