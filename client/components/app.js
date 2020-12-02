@@ -27,7 +27,7 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen w-auto items-center">
       <Head title="Hello" />
-      <Header cartItemsSummary={cartItemsSummary} sortedBy={sortedBy} />
+      <Header cartItemsSummary={cartItemsSummary} sortedBy={sortedBy} currency={currency} />
       <Route
         exact
         path="/"

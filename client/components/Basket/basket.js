@@ -37,7 +37,7 @@ const Basket = (props) => {
   }
 
   return (
-    <div className="flex flex-grow flex-wrap md:w-2/3 justify-center mb-12">
+    <div className="flex flex-grow flex-col flex-wrap md:w-2/3 items-center mb-12">
       <div className="flex md:text-2xl font-bold w-full justify-center p-4">Your Cart</div>
       {props.itemsInCartArray.length === 0 && 'Your Cart is empty'}
       {itemsInCart().map((it) => {

@@ -1,6 +1,10 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { addItemToCart, decreaseItemQuantity } from '../../redux/reducers/shopping'
+import {
+  addItemToCart,
+  decreaseItemQuantity,
+  removeItemFromCart
+} from '../../redux/reducers/shopping'
 import './basketitem.styles.scss'
 
 const BasketItem = ({ it, currency, currencyCoefficient }) => {
@@ -40,6 +44,13 @@ const BasketItem = ({ it, currency, currencyCoefficient }) => {
               onClick={() => dispatch(decreaseItemQuantity(it, it.amount - 1))}
             >
               -
+            </button>
+            <button
+              className="flex bg-gray-400 ml-2 px-2"
+              type="button"
+              onClick={() => dispatch(removeItemFromCart(it))}
+            >
+              Remove
             </button>
           </div>
         </div>

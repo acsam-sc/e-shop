@@ -11,7 +11,7 @@ import cookieParser from 'cookie-parser'
 import config from './config'
 import Html from '../client/html'
 
-const { readFile, writeFile } = require('fs').promises
+const { readFile, writeFile, unlink } = require('fs').promises
 
 const Root = () => ''
 
@@ -37,6 +37,7 @@ const port = process.env.PORT || 8090
 const server = express()
 
 const goodsFile = `${__dirname}/goods_small.json`
+const logFile = `${__dirname}/logs.json`
 
 const writeGoodsFile = async (data) =>
   writeFile(goodsFile, JSON.stringify(data), { encoding: 'utf8' })
@@ -61,6 +62,28 @@ const readGoodsFile = async () => {
     })
   return fileData
 }
+
+const readLogFile = async () => {
+  const fileData = await readFile(logFile, { encoding: 'utf8' })
+    .then((data) => JSON.parse(data))
+    .catch((err) => {
+      if (err.code === 'ENOENT') {
+        const dataToWrite = [{ date: +new Date(), action: '===== Log start =====' }]
+        writeFile(logFile, JSON.stringify(dataToWrite), { encoding: 'utf8' })
+        return dataToWrite
+      }
+      return err
+    })
+  return fileData
+}
+
+const writeLogFile = async (action) => {
+  const fileData = await readLogFile()
+  const dataToWrite = fileData.concat({ date: +new Date(), action })
+  await writeFile(logFile, JSON.stringify(dataToWrite), { encoding: 'utf8' })
+}
+
+const deleteLogFile = async () => unlink(logFile)
 
 const middleware = [
   cors(),
@@ -144,6 +167,21 @@ server.get('/api/v1/products', async (req, res) => {
     default:
       res.json(data)
   }
+})
+
+server.get('/api/v1/logs', async (req, res) => {
+  const response = await readLogFile()
+  res.json(response)
+})
+
+server.post('/api/v1/logs', async (req, res) => {
+  await writeLogFile(req.body.action)
+  res.json({ status: 'success' })
+})
+
+server.delete('/api/v1/logs', async (req, res) => {
+  await deleteLogFile()
+  res.json({ status: 'success' })
 })
 
 server.use('/api/', (req, res) => {

@@ -1,6 +1,7 @@
-import { reqProducts, reqCurrencyCoefficient } from '../../api/api'
+import { reqProducts, reqCurrencyCoefficient, postLog } from '../../api/api'
 
 const ADD_ITEM_TO_CART = 'e-shop/ADD_ITEM_TO_CART'
+const REMOVE_ITEM_FROM_CART = 'e-shop/REMOVE_ITEM_FROM_CART'
 const DECREASE_ITEM_QUANTITY = 'e-shop/DECREASE_ITEM_QUANTITY'
 const SET_FETCHING_STATUS = 'e-shop/SET_FETCHING_STATUS'
 const SET_ERROR = 'e-shop/SET_ERROR'
@@ -41,6 +42,11 @@ const decreaseItemQuantityAC = (item, amount) => ({
   payload: { item, amount }
 })
 
+const removeItemFromCartAC = (itemId) => ({
+  type: REMOVE_ITEM_FROM_CART,
+  payload: itemId
+})
+
 export const setCurrency = (currency) => ({ type: SET_CURRENCY, payload: currency })
 
 const shoppingReducer = (state = initialState, action) => {
@@ -71,6 +77,12 @@ const shoppingReducer = (state = initialState, action) => {
           if (item.id === action.payload.item.id) return { ...item, amount: action.payload.amount }
           return item
         })
+      }
+    }
+    case REMOVE_ITEM_FROM_CART: {
+      return {
+        ...state,
+        itemsInCart: state.itemsInCart.filter((item) => item.id !== action.payload)
       }
     }
     case SET_FETCHING_STATUS: {
@@ -124,6 +136,7 @@ const shoppingReducer = (state = initialState, action) => {
 }
 
 export const getProductsList = (query) => async (dispatch) => {
+  dispatch(setError(null))
   dispatch(setFetchingStatus(true))
   try {
     const productsList = await reqProducts(query)
@@ -138,6 +151,7 @@ export const getProductsList = (query) => async (dispatch) => {
 }
 
 export const getCurrencyCoefficient = (currency) => async (dispatch) => {
+  dispatch(setError(null))
   if (currency === 'EUR') {
     dispatch(setCurrency(currency))
     dispatch(setCurrencyCoefficient(1))
@@ -160,17 +174,20 @@ export const getCurrencyCoefficient = (currency) => async (dispatch) => {
 export const addItemToCart = (item, amount) => async (dispatch) => {
   dispatch(addItemToCartAC(item, amount))
   dispatch(setSummaryItems())
+  postLog(`${item.title} added to cart, amount: ${amount}`)
 }
 
-// export const removeItemFromCart = (item) => async (dispatch) => {
-//   dispatch(removeItemFromCartAC(item))
-//   dispatch(setSummaryItems())
-// }
+export const removeItemFromCart = (item) => async (dispatch) => {
+  dispatch(removeItemFromCartAC(item.id))
+  dispatch(setSummaryItems())
+  postLog(`${item.title} removed from cart`)
+}
 
 export const decreaseItemQuantity = (item, amount) => async (dispatch) => {
   if (amount >= 0) {
     dispatch(decreaseItemQuantityAC(item, amount))
     dispatch(setSummaryItems())
+    postLog(`Quantity of ${item.title} decreased to ${amount}`)
   }
 }
 
