@@ -31,7 +31,7 @@ const BasketItem = ({ it, currency, currencyCoefficient }) => {
           )}
           <div className="flex ml-auto w-auto whitespace-nowrap text-sm px-2">
             <button
-              className="flex bg-gray-400 px-2"
+              className="flex bg-gray-400 px-2 text-xs md:text-base"
               type="button"
               onClick={() => dispatch(addItemToCart(it, it.amount + 1))}
             >
@@ -39,14 +39,14 @@ const BasketItem = ({ it, currency, currencyCoefficient }) => {
             </button>
             <span className="flex px-2">{it.amount}</span>
             <button
-              className="flex bg-gray-400 px-2"
+              className="flex bg-gray-400 px-2 text-xs md:text-base"
               type="button"
               onClick={() => dispatch(decreaseItemQuantity(it, it.amount - 1))}
             >
               -
             </button>
             <button
-              className="flex bg-gray-400 ml-2 px-2"
+              className="flex bg-gray-400 ml-2 px-2 text-xs md:text-base"
               type="button"
               onClick={() => dispatch(removeItemFromCart(it))}
             >

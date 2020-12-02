@@ -28,7 +28,7 @@ const Card = ({ it, amount, currency, currencyCoefficient }) => {
             </span>
           )}
           <button
-            className="flex ml-auto bg-gray-400 w-auto whitespace-nowrap text-sm px-2"
+            className="flex ml-auto bg-gray-400 w-auto whitespace-nowrap text-xs md:text-sm px-2"
             type="button"
             onClick={() => dispatch(addItemToCart(it, amount + 1))}
           >
