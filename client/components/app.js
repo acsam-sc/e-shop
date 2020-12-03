@@ -6,6 +6,7 @@ import Header from './Header/header'
 import CardList from './CardList/cardlist'
 import Basket from './Basket/basket'
 import Footer from './Footer/footer'
+import Logs from './Logs/logs'
 import { getProductsList } from '../redux/reducers/shopping'
 
 const App = () => {
@@ -70,6 +71,7 @@ const App = () => {
           />
         )}
       />
+      <Route exact path="/logs" component={() => <Logs />} />
     </div>
   )
 }

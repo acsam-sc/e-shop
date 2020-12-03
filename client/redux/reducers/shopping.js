@@ -203,20 +203,20 @@ export const getCurrencyCoefficient = (currency) => async (dispatch) => {
 export const addItemToCart = (item, amount) => async (dispatch) => {
   dispatch(addItemToCartAC(item, amount))
   dispatch(setSummaryItems())
-  postLog(`${item.title} added to cart, amount: ${amount}`)
+  postLog(`"${item.title}" added to cart, amount: ${amount}`)
 }
 
 export const removeItemFromCart = (item) => async (dispatch) => {
   dispatch(removeItemFromCartAC(item.id))
   dispatch(setSummaryItems())
-  postLog(`${item.title} removed from cart`)
+  postLog(`"${item.title}" removed from cart`)
 }
 
 export const decreaseItemQuantity = (item, amount) => async (dispatch) => {
   if (amount >= 0) {
     dispatch(decreaseItemQuantityAC(item, amount))
     dispatch(setSummaryItems())
-    postLog(`Quantity of ${item.title} decreased to ${amount}`)
+    postLog(`"${item.title}" amount decreased to ${amount}`)
   }
 }
 

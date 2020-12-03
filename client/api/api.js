@@ -16,3 +16,8 @@ export const postLog = (action) => {
   const response = axios.post(`${serverURL}/api/v1/logs`, { action })
   return response
 }
+
+export const getLogs = async () => {
+  const response = await axios.get(`${serverURL}/api/v1/logs`)
+  return response
+}
