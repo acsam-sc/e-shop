@@ -60,7 +60,6 @@ const Header = (props) => {
             type="button"
             className="px-1 font-semibold"
             onClick={() => {
-              postLog(`Currency changed from ${props.currency} to USD`)
               dispatch(getCurrencyCoefficient('USD'))
             }}
           >
@@ -71,7 +70,6 @@ const Header = (props) => {
             type="button"
             className="px-1 font-semibold"
             onClick={() => {
-              postLog(`Currency changed from ${props.currency} to EUR`)
               dispatch(getCurrencyCoefficient('EUR'))
             }}
           >
@@ -82,7 +80,6 @@ const Header = (props) => {
             type="button"
             className="px-1 font-semibold"
             onClick={() => {
-              postLog(`Currency changed from ${props.currency} to CAD`)
               dispatch(getCurrencyCoefficient('CAD'))
             }}
           >

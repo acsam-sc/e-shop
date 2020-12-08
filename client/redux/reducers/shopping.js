@@ -168,19 +168,20 @@ export const getProductsList = (query) => async (dispatch) => {
   dispatch(setFetchingStatus(true))
   try {
     const productsList = await reqProducts(query)
-    dispatch(setFetchingStatus(false))
     dispatch(setProductList(productsList.data.items))
     dispatch(setTotalCount(productsList.data.totalCount))
-  } catch (err) {
     dispatch(setFetchingStatus(false))
+  } catch (err) {
     dispatch(setError('Error getting product list'))
+    dispatch(setFetchingStatus(false))
     // eslint-disable-next-line no-console
     console.log('Error getting product list')
   }
 }
 
-export const getCurrencyCoefficient = (currency) => async (dispatch) => {
+export const getCurrencyCoefficient = (currency) => async (dispatch, getState) => {
   dispatch(setError(null))
+  postLog(`Currency changed from ${getState().shoppingReducer.currency} to ${currency}`)
   if (currency === 'EUR') {
     dispatch(setCurrency(currency))
     dispatch(setCurrencyCoefficient(1))
