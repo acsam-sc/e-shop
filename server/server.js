@@ -97,7 +97,7 @@ middleware.forEach((it) => server.use(it))
 
 server.get('/api/v1/exchangerate', async (req, res) => {
   const data = await axios.get(
-    `https://api.exchangeratesapi.io/latest?symbols=${req.query.currency}`
+    `https://api.exchangerate.host/latest?symbols=${req.query.currency}`
   )
   res.json(data.data)
 })
