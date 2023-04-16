@@ -59,4 +59,4 @@ const Paginator = () => {
   )
 }
 
-export default Paginator
+export default React.memo(Paginator)

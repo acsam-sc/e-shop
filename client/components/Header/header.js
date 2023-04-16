@@ -1,16 +1,17 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { setSorting, getCurrencyCoefficient } from '../../redux/reducers/shopping'
 import { postLog } from '../../api/api'
 
-const Header = (props) => {
+const Header = () => {
+  const { sortedBy, cartItemsSummary } = useSelector((state) => state.shoppingReducer)
   const dispatch = useDispatch()
 
   const handlePriceSortClick = () => {
-    if (props.sortedBy === 'priceDesc') {
+    if (sortedBy === 'priceDesc') {
       dispatch(setSorting('priceAsc'))
       postLog(`Sort by priceAsc`)
     } else {
@@ -20,7 +21,7 @@ const Header = (props) => {
   }
 
   const handleAZSortClick = () => {
-    if (props.sortedBy === 'a-z') {
+    if (sortedBy === 'a-z') {
       dispatch(setSorting('z-a'))
       postLog(`Sort by Z-A`)
     } else {
@@ -46,10 +47,10 @@ const Header = (props) => {
             className="px-1 font-semibold"
             onClick={() => handlePriceSortClick()}
           >
-            Price {props.sortedBy === 'priceDesc' ? <span>&#8593;</span> : <span>&#8595;</span>}
+            Price {sortedBy === 'priceDesc' ? <span>&#8593;</span> : <span>&#8595;</span>}
           </button>
           <button type="button" className="px-1 font-semibold" onClick={() => handleAZSortClick()}>
-            {props.sortedBy === 'a-z' ? 'Z-A' : 'A-Z'}
+            {sortedBy === 'a-z' ? 'Z-A' : 'A-Z'}
           </button>
         </div>
       </div>
@@ -93,7 +94,7 @@ const Header = (props) => {
         onClick={() => postLog(`Navigate to ${window.location.origin}/basket`)}
       >
         <span className="text-yellow-500 text-xs md:text-lg justify-center">
-          {props.cartItemsSummary}
+          {cartItemsSummary}
         </span>
         <div>
           <FontAwesomeIcon icon={faShoppingCart} />
