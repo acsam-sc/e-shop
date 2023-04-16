@@ -1,5 +1,7 @@
 # SkillCrucial React Redux boilerplate
 
+Demo: http://e-shop.acsam.cz/
+
 ## Quick start
 
 1. Clone this repo using:
